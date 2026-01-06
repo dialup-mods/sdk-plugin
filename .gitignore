@@ -1,0 +1,6 @@
+SDK/
+build/
+cmake-build*
+.idea/
+*.sw*
+generated/
