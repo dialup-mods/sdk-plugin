@@ -28,8 +28,8 @@ Runtime::setFNameEntries(reinterpret_cast<TArray<FNameEntry*>*>(fNameEntriesAddr
 Runtime::setUObjects(reinterpret_cast<TArray<UObject*>*>(uObjectsAddr));
 
 // anywhere, across all of your plugins
-auto* uObjCls = Runtime::findClass("Class Core.Object");
-if (uObjCls && uObjCls->GetFullName() == "Class Core.Object") {
+auto* objectClass = Runtime::findClass("Class Core.Object");
+if (objectClass && objectClass->GetFullName() == "Class Core.Object") {
     printf("pass\n");
 } else {
     printf("fail\n");
