@@ -16,6 +16,25 @@ Without this, every plugin compiles its own copy of the SDK:
 - ✅ Compile SDK once, link everywhere
 - ✅ Type safety across boundaries
 
+### Synopsis
+
+```c++
+#include "SDK.h"
+
+Runtime::create();
+
+// one time, from any plugin
+Runtime::setFNameEntries(reinterpret_cast<TArray<FNameEntry*>*>(fNameEntriesAddr));
+Runtime::setUObjects(reinterpret_cast<TArray<UObject*>*>(uObjectsAddr));
+
+// anywhere, across all of your plugins
+auto* uObjCls = Runtime::findClass("Class Core.Object");
+if (uObjCls && uObjCls->GetFullName() == "Class Core.Object") {
+    printf("pass\n");
+} else {
+    printf("fail\n");
+}
+```
 
 ## Building
 
@@ -82,23 +101,3 @@ You'll need to configure:
 - Import lib: `~/AppData/Local/DialUp/sdk-plugin/bin/DialUp-SDK.lib`
 
 </details>
-
-### Usage
-
-```c++
-#include "SDK.h"
-
-Runtime::create();
-
-// one time, from any plugin
-Runtime::setFNameEntries(reinterpret_cast<TArray<FNameEntry*>*>(fNameEntriesAddr));
-Runtime::setUObjects(reinterpret_cast<TArray<UObject*>*>(uObjectsAddr));
-
-// anywhere, across all of your plugins
-auto* uObjCls = Runtime::findClass("Class Core.Object");
-if (uObjCls && uObjCls->GetFullName() == "Class Core.Object") {
-    printf("pass\n");
-} else {
-    printf("fail\n");
-}
-```
