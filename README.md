@@ -1,22 +1,9 @@
-# DialUp SDK Plugin
+<h1 align="center">🌐 Dial-Up Unreal Engine SDK Plugin 🌐</h1>
+<p align="center">*Best viewed in 800x600*</p>
 
 Build your generated SDK into a reusable library that can be safely shared across multiple plugins.
 
-## Why?
-
-Without this, every plugin compiles its own copy of the SDK:
-- Duplicate symbols across plugins
-- Multiple Runtime instances (cache duplication)
-- ODR violations
-- Heap corruption risks
-
-**With DialUp-SDK:**
-- ✅ One shared SDK lib
-- ✅ Single Runtime instance
-- ✅ Compile SDK once, link everywhere
-- ✅ Type safety across boundaries
-
-### Synopsis
+## Synopsis
 
 ```c++
 #include "SDK.h"
@@ -36,38 +23,44 @@ if (objectClass && objectClass->GetFullName() == "Class Core.Object") {
 }
 ```
 
-## Building
+## Why?
 
-First, clone from the [main DialUp repo](https://github.com/dialup-mods/dialup)
+Without this, every plugin compiles its own copy of the SDK:
+- Duplicate symbols across plugins
+- Multiple Runtime instances (cache duplication)
+- ODR violations
+- Heap corruption risks
 
-```sh
-git clone git@github.com:dialup-mods/dialup.git
+**With DialUp-SDK:**
+- ✓ One shared SDK lib
+- ✓ Single Runtime instance
+- ✓ Compile SDK once, link everywhere
+- ✓ Type safety across boundaries
+
+## Quick Start
+
+### 1. Prerequisites
+
+#### Install Dependencies
+
+Run the following in Powershell as administrator to install: Git, CMake, Ninja, Clang, MSYS2
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/dialup-mods/dialup/main/tools/install_build_deps.ps1 | iex
+```
+
+#### Clone and Install Build Tools
+```bash
+git clone --recursive git@github.com:dialup-mods/dialup.git
 cd dialup
-```
-
-Install build dependencies
-
-```cmd
-# install the latest CMake, Ninja, Clang, Git, and MSYS2 via handy script
-powershell -ExecutionPolicy Bypass -File install_build_deps.ps1
-```
-
-Install DialUp build tools
-
-```sh
 make install-tools
 ```
 
-Generate your SDK
+#### Generate your SDK
 
-```sh
-cd sdk-generator
-make configure game=mygame # (or `make configure` to use the default profile)
-make build
-make inject
-```
+[Click here](https://github.com/dialup-tools/sdk-generator/README.md) to view the `Quick Start` section for the **Dial-Up SDK Generator**
 
-Now convert the generated SDK into a library
+### 2. Convert the generated SDK into a library
 ```sh
 cd ../sdk-plugin
 make configure
@@ -83,7 +76,7 @@ find_package(DialUp-SDK REQUIRED PATHS $ENV{LOCALAPPDATA}/DialUp/sdk-plugin)
 target_link_libraries(YourPlugin PRIVATE DialUp-SDK::DialUp-SDK)
 ```
 
-Note: Use the code found in test/ as an example
+Note: Use the code found in `test/test_Runtime.h` as an example
 
 ### Visual Studio
 Integration with .vcxproj files is possible but our team finds it needlessly 
@@ -101,3 +94,24 @@ You'll need to configure:
 - Import lib: `~/AppData/Local/DialUp/sdk-plugin/bin/DialUp-SDK.lib`
 
 </details>
+
+## Testing
+
+A `Runtime` test is provided in `test/`
+
+To run the test:
+
+- implement your function for finding the address of UObjects and FNameEntries in test_Runtime.h
+
+- Run your game (tooling is currently set up for Rocket League, see: dialup/tooling/build-tools/. Simple change. Configuration options are under construction)
+
+- Install the **Dial-Up Injector** \[[link](https://github.com/dialup-mods/injector)\]
+
+- From the `/test` directory:
+
+```sh
+make configure
+make build
+make run
+```
+
